@@ -1,0 +1,25 @@
+### Read all notes
+GET http://localhost:3002/api/notes
+
+### Create a new note
+POST http://localhost:3002/api/notes
+Content-Type: application/json
+
+{
+    "title": "Study React & NextJS",
+    "content": "Learn Front end, too",
+    "isCompleted": false
+}
+
+### Update a note
+PUT http://localhost:3002/api/notes/1
+Content-Type: application/json
+
+{
+    "title": "New Project Idea #1 (Updated with NextJS)",
+    "content": "Build an E-Commerce app using Nextjs and Tailwind",
+    "isCompleted": true
+}
+
+### Delete a note
+DELETE http://localhost:3002/api/notes/1

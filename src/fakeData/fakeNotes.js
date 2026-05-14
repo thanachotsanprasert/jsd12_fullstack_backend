@@ -13,7 +13,7 @@ export const notes = [
     },
     {
         id: "3",
-        title: "Backend Team Study #3",
+        title: "System design study #3",
         content:
             "Study about refactoring the folder structure using Separation of Concerns",
         isCompleted: false,
