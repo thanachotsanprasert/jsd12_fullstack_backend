@@ -1,0 +1,34 @@
+export const products = [
+    {
+        id: "1",
+        name: "MacBook 01",
+        price: 59900,
+        category: "Laptop",
+        inStock: true,
+        description: "Laptop for Good Dev",
+    },
+    {
+        id: "2",
+        name: "Keychron 02",
+        price: 3590,
+        category: "Keyboard",
+        inStock: true,
+        description: "Cool Mechanical keyboard",
+    },
+    {
+        id: "3",
+        name: "Sony Headphone 03",
+        price: 12990,
+        category: "Headphone",
+        inStock: false,
+        description: "Premium Headphone",
+    },
+    {
+        id: "4",
+        name: "Logitech Mouse Master 04",
+        price: 3990,
+        category: "Mouse",
+        inStock: true,
+        description: "Beautiful Mouse",
+    },
+];

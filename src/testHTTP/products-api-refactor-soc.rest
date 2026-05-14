@@ -1,0 +1,29 @@
+### Read all products
+GET http://localhost:3002/api/products
+
+### Create a new product
+POST http://localhost:3002/api/products
+Content-Type: application/json
+
+{
+    "name": "Nintendo Switch OLED 05",
+    "price": 11990,
+    "category": "Console",
+    "inStock": true,
+    "description": "Handheld gaming console with OLED screen"
+}
+
+### Update a product
+PUT http://localhost:3002/api/products/1
+Content-Type: application/json
+
+{
+    "name": "MacBook Pro Max 01b",
+    "price": 129000,
+    "category": "Laptop",
+    "inStock": false,
+    "description": "Super Laptop for Ultra Good Dev"
+}
+
+### Delete a product
+DELETE http://localhost:3002/api/products/1
