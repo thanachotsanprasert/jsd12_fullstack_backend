@@ -1,5 +1,7 @@
 import express from "express";
+
 import cors from "cors";
+import { connectDB } from "./config/mongodb.js";
 
 import { router as apiRoutes } from "./routes/index.js";
 
@@ -43,7 +45,9 @@ app.get("/", (req, res) => {
 
 app.use("/api", apiRoutes);
 
+await connectDB();
+
 const PORT = 3002;
 app.listen(PORT, () => {
-    console.log(`Server running at: http://localhost:${PORT} 😈`);
+    console.log(`Server running at: http://localhost:${PORT} 🟢`);
 });

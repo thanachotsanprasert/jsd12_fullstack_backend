@@ -1,32 +1,42 @@
 import { Router } from "express";
-
-import { users } from "../../fakeData/fakeUsers.js";
+import { User } from "../../modules/users/user.model.js";
 
 export const router = Router();
 
-router.get("/", (req, res) => {
-    res.json(users);
+const userResponse = (doc) => {
+    const user = doc.toObject();
+    delete user.password;
+    return user;
+};
+
+router.get("/", async (req, res) => {
+    try {
+        const users = await User.find();
+        return res.status(200).json({ success: true, data: users });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error });
+    }
 });
 
-router.post("/", (req, res) => {
-    const { username, email } = req.body || {};
+router.post("/", async (req, res) => {
+    const { username, email, password, role } = req.body || {};
 
-    if (!username || !email) {
-        return res
-            .status(400)
-            .json({ error: "username and email are required" });
+    if (!username || !email || !password) {
+        const err = new Error("username and email are required");
+        err.name = "validationError";
+        err.status = 400;
+        return res.status(400).json({ success: false, error: err });
     }
 
-    const nextID = String(
-        (users.reduce((max, u) => Math.max(max, Number(u.id)), 0) || 0) + 1,
-    );
-
-    const newUser = { id: nextID, username, email };
-    users.push(newUser);
-    return res.status(201).json(newUser);
+    try {
+        const doc = await User.create({ username, email, password, role });
+        return res.status(201).json({ success: true, data: userResponse(doc) });
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err });
+    }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
     const user = users.find((u) => u.id === String(req.params.id));
 
     if (!user) {
@@ -48,7 +58,7 @@ router.put("/:id", (req, res) => {
     return res.status(200).json(user);
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
     const userIndex = users.findIndex((u) => u.id === String(req.params.id));
 
     if (userIndex === -1) {
