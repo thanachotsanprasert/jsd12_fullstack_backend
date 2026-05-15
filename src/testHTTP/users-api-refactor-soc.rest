@@ -1,8 +1,8 @@
 ### Read all users
-GET http://localhost:3002/api/users
+GET http://localhost:3002/api/v1/users
 
 ### Create a new user
-POST http://localhost:3002/api/users
+POST http://localhost:3002/api/v1/users
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Update a user
-PUT http://localhost:3002/api/users/1
+PUT http://localhost:3002/api/v1/users/1
 Content-Type: application/json
 
 {
@@ -22,4 +22,4 @@ Content-Type: application/json
 }
 
 ### Delete a user
-DELETE http://localhost:3002/api/users/1
+DELETE http://localhost:3002/api/v1/users/1
