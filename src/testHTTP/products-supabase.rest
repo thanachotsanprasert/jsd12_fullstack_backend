@@ -1,13 +1,13 @@
 ### Read all products
-GET http://localhost:3002/api/v2/products
+GET http://localhost:3002/api/v2/products/pg
 
 ### Create a new product
-POST http://localhost:3002/api/v2/products
+POST http://localhost:3002/api/v2/products/pg
 Content-Type: application/json
 
     # {
     #     "id": "1",
-    #     "name": "MacBook 01",
+    #     "name": "MacBook PG-01",
     #     "price": 59900,
     #     "category": "Laptop",
     #     "inStock": true,
@@ -16,7 +16,7 @@ Content-Type: application/json
 
     # {
     #     "id": "2",
-    #     "name": "Keychron 02",
+    #     "name": "Keychron PG-02",
     #     "price": 3590,
     #     "category": "Keyboard",
     #     "inStock": true,
@@ -25,7 +25,7 @@ Content-Type: application/json
 
     # {
     #     "id": "3",
-    #     "name": "Sony Headphone 03",
+    #     "name": "Sony Headphone PG-03",
     #     "price": 12990,
     #     "category": "Headphone",
     #     "inStock": false,
@@ -34,7 +34,7 @@ Content-Type: application/json
 
     # {
     #     "id": "4",
-    #     "name": "Logitech Mouse Master 04",
+    #     "name": "Logitech Mouse Master PG-04",
     #     "price": 3990,
     #     "category": "Mouse",
     #     "inStock": true,
@@ -42,7 +42,7 @@ Content-Type: application/json
     # }
 
     {
-        "name": "Nintendo Switch OLED 05",
+        "name": "Nintendo Switch OLED PG-05",
         "price": 11990,
         "category": "Console",
         "inStock": true,
@@ -50,7 +50,7 @@ Content-Type: application/json
     }
 
 ### Update a product
-PUT http://localhost:3002/api/v2/products/6a0b196607dad1732e9f5dd5
+PUT http://localhost:3002/api/v2/products/pg/1
 Content-Type: application/json
 
 {
@@ -62,4 +62,4 @@ Content-Type: application/json
 }
 
 ### Delete a product
-DELETE http://localhost:3002/api/v2/products/6a0b197b07dad1732e9f5dd6
+DELETE http://localhost:3002/api/v2/products/pg/1

@@ -31,4 +31,12 @@ export const products = [
         inStock: true,
         description: "Beautiful Mouse",
     },
+    {
+        id: "5",
+        name: "Nintendo Switch OLED 05",
+        price: 11990,
+        category: "Console",
+        inStock: true,
+        description: "Handheld gaming console with OLED screen",
+    },
 ];

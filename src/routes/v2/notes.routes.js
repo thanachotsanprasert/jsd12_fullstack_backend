@@ -1,7 +1,5 @@
 import { Router } from "express";
 
-import { notes } from "../../fakeData/fakeNotes.js";
-
 export const router = Router();
 
 router.get("/", (req, res) => {

@@ -5,21 +5,57 @@ GET http://localhost:3002/api/v2/users
 POST http://localhost:3002/api/v2/users
 Content-Type: application/json
 
-{
-    "username": "araraki",
-    "email": "a@a.com",
-    "password": "aaaaaaaa"
-}
+    # {
+    #     "id": "1",
+    #     "username": "araraki",
+    #     "email": "a@a.com",
+    #     "password": "aaaaaaaa"
+    # }
+
+    # {
+    #     "id": "2",
+    #     "username": "beniyakumo",
+    #     "email": "b@b.com",
+    #     "password": "bbbbbbbb"
+    # }
+
+    # {
+    #     "id": "3",
+    #     "username": "chinnosuke",
+    #     "email": "c@c.com",
+    #     "password": "cccccccc"
+    # }
+
+    # {
+    #     "id": "4",
+    #     "username": "dorikawa",
+    #     "email": "d@d.com",
+    #     "password": "dddddddd"
+    # }
+
+    # {
+    #     "id": "5",
+    #     "username": "edogawa",
+    #     "email": "e@e.com",
+    #     "password": "eeeeeeee"
+    # }
+
+    {
+        "id": "6",
+        "username": "fukuoka",
+        "email": "f@f.com",
+        "password": "ffffffff"
+    }
 
 ### Update a user
-PUT http://localhost:3002/api/v2/users/1
+PUT http://localhost:3002/api/v2/users/6a0ac7e0607fc5d689a3501a
 Content-Type: application/json
 
 {
-    "username": "anthony",
-    "email": "z@z.com",
-    "password": "zzzzzzzz"
+    "username": "xenoses",
+    "email": "x@x.com",
+    "password": "xxxxxxxx"
 }
 
 ### Delete a user
-DELETE http://localhost:3002/api/v2/users/1
+DELETE http://localhost:3002/api/v2/users/6a0ac7e0607fc5d689a3501a

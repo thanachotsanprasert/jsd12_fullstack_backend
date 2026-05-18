@@ -40,40 +40,58 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-    const user = users.find((u) => u.id === String(req.params.id));
+    const { username, email, password, role } = req.body || {};
+    const updates = {};
 
-    if (!user) {
-        return res.status(404).json({ error: "not found" });
+    if (username !== undefined) updates.username = username;
+    if (email !== undefined) updates.email = email;
+    if (password !== undefined) updates.password = password;
+    if (role !== undefined) updates.role = role;
+
+    if (Object.keys(updates).length === 0) {
+        return res.status(400).json({
+            success: false,
+            error: "At least one field is required to update",
+        });
     }
 
-    const { username, email, password } = req.body || {};
+    try {
+        const doc = await User.findByIdAndUpdate(req.params.id, updates, {
+            // new: true,
+            returnDocument: "after",
+            runValidators: true,
+        });
 
-    if (!username || !email || !password) {
-        return res
-            .status(400)
-            .json({ error: "username, email and password are require!" });
+        if (!doc) {
+            return res
+                .status(404)
+                .json({ success: false, error: "Use not found" });
+        }
+
+        return res.status(200).json({ success: true, data: doc });
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err });
     }
-
-    user.username = username;
-    user.email = email;
-    user.password = password;
-
-    return res.status(200).json(user);
 });
 
 router.delete("/:id", async (req, res) => {
-    const userIndex = users.findIndex((u) => u.id === String(req.params.id));
+    try {
+        const doc = await User.findByIdAndDelete(req.params.id);
 
-    if (userIndex === -1) {
-        return res.status(404).json({ error: "not found" });
+        if (!doc) {
+            return res
+                .status(404)
+                .json({ success: false, error: "User not found" });
+        }
+
+        return res.status(200).json({ success: true, data: doc });
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err });
     }
-
-    const deletedUser = users.splice(userIndex, 1)[0];
-
-    return res.status(200).json(deletedUser);
 });
 
-// supabase api/v2
+// Supabase / PostgreSQL routes (/api/v2/users/pg)
+// Password is excluded from SELECT.
 
 const PG_SELECT = "id, username, email, role, created_at, updated_at";
 

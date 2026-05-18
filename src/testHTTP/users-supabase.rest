@@ -13,12 +13,47 @@ GET http://localhost:3002/api/v2/users/pg
 POST http://localhost:3002/api/v2/users/pg
 Content-Type: application/json
 
-{
-    "username": "araraki",
-    "role": "admin",
-    "email": "a@a.com",
-    "password": "aaaaaaaa"
-}
+    # {
+    #     "id": "1",
+    #     "username": "araraki-PG",
+    #     "email": "a@a.com",
+    #     "password": "aaaaaaaa"
+    # }
+
+    # {
+    #     "id": "2",
+    #     "username": "beniyakumo-PG",
+    #     "email": "b@b.com",
+    #     "password": "bbbbbbbb"
+    # }
+
+    # {
+    #     "id": "3",
+    #     "username": "chinnosuke-PG",
+    #     "email": "c@c.com",
+    #     "password": "cccccccc"
+    # }
+
+    # {
+    #     "id": "4",
+    #     "username": "dorikawa-PG",
+    #     "email": "d@d.com",
+    #     "password": "dddddddd"
+    # }
+
+    # {
+    #     "id": "5",
+    #     "username": "edogawa-PG",
+    #     "email": "e@e.com",
+    #     "password": "eeeeeeee"
+    # }
+
+    {
+        "id": "6",
+        "username": "fukuoka-PG",
+        "email": "f@f.com",
+        "password": "ffffffff"
+    }
 
 ### Update a user (Supabase) — replace the UUID with a real id from POST response gintama -> Gintoki Updated
 PUT http://localhost:3002/api/v2/users/pg/2f863d7e-8432-409c-8b1f-bc363fb976c1
