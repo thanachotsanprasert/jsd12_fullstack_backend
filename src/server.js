@@ -2,6 +2,7 @@ import express from "express";
 
 import cors from "cors";
 import { connectDB } from "./config/mongodb.js";
+import { connectSupabase } from "./config/supabase.js";
 
 import { router as apiRoutes } from "./routes/index.js";
 
@@ -46,6 +47,7 @@ app.get("/", (req, res) => {
 app.use("/api", apiRoutes);
 
 await connectDB();
+await connectSupabase();
 
 const PORT = 3002;
 app.listen(PORT, () => {

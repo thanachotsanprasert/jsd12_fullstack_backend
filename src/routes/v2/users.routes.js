@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { User } from "../../modules/users/user.model.js";
+import { supabase } from "../../config/supabase.js";
 
 export const router = Router();
 
@@ -8,6 +9,8 @@ const userResponse = (doc) => {
     delete user.password;
     return user;
 };
+
+// mongoDB api/v2
 
 router.get("/", async (req, res) => {
     try {
@@ -68,4 +71,79 @@ router.delete("/:id", async (req, res) => {
     const deletedUser = users.splice(userIndex, 1)[0];
 
     return res.status(200).json(deletedUser);
+});
+
+// supabase api/v2
+
+const PG_SELECT = "id, username, email, role, created_at, updated_at";
+
+router.get("/pg", async (req, res) => {
+    try {
+        const { data, error } = await supabase.from("users").select(PG_SELECT);
+
+        if (error) throw error;
+
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+router.post("/pg", async (req, res) => {
+    const { username, email, password, role } = req.body || {};
+
+    if (!username || !email || !password) {
+        return res.status(400).json({
+            success: false,
+            error: "username, email, and password are required",
+        });
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("users")
+            .insert({ username, email, password, role: role || "user" })
+            .select(PG_SELECT)
+            .single();
+
+        if (error) throw error;
+
+        return res.status(201).json({ success: true, data });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+router.put("/pg/:id", async (req, res) => {
+    const { id } = req.params;
+
+    const { username, email, password, role } = req.body || {};
+
+    const updates = {};
+    if (username !== undefined) updates.username = username;
+    if (email !== undefined) updates.email = email;
+    if (password !== undefined) updates.password = password;
+    if (role !== undefined) updates.role = role;
+
+    if (Object.keys(updates).length === 0) {
+        return res.status(400).json({
+            success: false,
+            error: "No data provided to update",
+        });
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("users")
+            .update(updates)
+            .eq("id", id)
+            .select(PG_SELECT)
+            .single();
+
+        if (error) throw error;
+
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
 });
