@@ -1,65 +1,191 @@
 import { Router } from "express";
+import { Note } from "../../modules/notes/note.model.js";
+import { supabase } from "../../config/supabase.js";
 
 export const router = Router();
 
-router.get("/", (req, res) => {
-    res.json(notes);
+// mongoDB api/v2
+
+router.get("/", async (req, res) => {
+    try {
+        const notes = await Note.find();
+        return res.status(200).json({ success: true, data: notes });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error });
+    }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     const { title, content, isCompleted } = req.body || {};
 
     if (!title || !content) {
-        return res
-            .status(400)
-            .json({ error: "title and content are required" });
+        const err = new Error("title and content are required");
+        err.name = "validationError";
+        err.status = 400;
+        return res.status(400).json({ success: false, error: err });
     }
 
-    const nextID = String(
-        (notes.reduce((max, n) => Math.max(max, Number(n.id)), 0) || 0) + 1,
-    );
-
-    const newNote = {
-        id: nextID,
-        title,
-        content,
-        isCompleted: isCompleted !== undefined ? isCompleted : false,
-    };
-
-    notes.push(newNote);
-    return res.status(201).json(newNote);
+    try {
+        const doc = await Note.create({
+            title,
+            content,
+            isCompleted,
+        });
+        return res.status(201).json({ success: true, data: doc });
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err });
+    }
 });
 
-router.put("/:id", (req, res) => {
-    const note = notes.find((n) => n.id === String(req.params.id));
-
-    if (!note) {
-        return res.status(404).json({ error: "not found" });
-    }
-
+router.put("/:id", async (req, res) => {
     const { title, content, isCompleted } = req.body || {};
+    const updates = {};
 
-    if (!title || !content || isCompleted === undefined) {
+    if (title !== undefined) updates.title = title;
+    if (content !== undefined) updates.content = content;
+    if (isCompleted !== undefined) updates.isCompleted = isCompleted;
+
+    if (Object.keys(updates).length === 0) {
         return res.status(400).json({
-            error: "title, content, and isCompleted are required!",
+            success: false,
+            error: "At least one field is required to update",
         });
     }
 
-    note.title = title;
-    note.content = content;
-    note.isCompleted = isCompleted;
+    try {
+        const doc = await Note.findByIdAndUpdate(req.params.id, updates, {
+            returnDocument: "after",
+            runValidators: true,
+        });
 
-    return res.status(200).json(note);
+        if (!doc) {
+            return res
+                .status(404)
+                .json({ success: false, error: "Note not found" });
+        }
+
+        return res.status(200).json({ success: true, data: doc });
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err });
+    }
 });
 
-router.delete("/:id", (req, res) => {
-    const noteIndex = notes.findIndex((n) => n.id === String(req.params.id));
+router.delete("/:id", async (req, res) => {
+    try {
+        const doc = await Note.findByIdAndDelete(req.params.id);
 
-    if (noteIndex === -1) {
-        return res.status(404).json({ error: "not found" });
+        if (!doc) {
+            return res
+                .status(404)
+                .json({ success: false, error: "Note not found" });
+        }
+
+        return res.status(200).json({ success: true, data: doc });
+    } catch (err) {
+        return res.status(400).json({ success: false, error: err });
+    }
+});
+
+// Supabase / PostgreSQL routes (/api/v2/notes/pg)
+
+const PG_SELECT = "id, title, content, is_completed, created_at, updated_at";
+
+router.get("/pg", async (req, res) => {
+    try {
+        const { data, error } = await supabase.from("notes").select(PG_SELECT);
+
+        if (error) throw error;
+
+        return res.status(200).json({ success: true, data });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+router.post("/pg", async (req, res) => {
+    const { title, content, isCompleted } = req.body || {};
+
+    if (!title || !content) {
+        return res.status(400).json({
+            success: false,
+            error: "title and content are required",
+        });
     }
 
-    const deletedNote = notes.splice(noteIndex, 1)[0];
+    try {
+        const { data, error } = await supabase
+            .from("notes")
+            .insert({
+                title,
+                content,
+                is_completed: isCompleted !== undefined ? isCompleted : false,
+            })
+            .select(PG_SELECT)
+            .single();
 
-    return res.status(200).json(deletedNote);
+        if (error) throw error;
+
+        return res.status(201).json({ success: true, data });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+router.put("/pg/:id", async (req, res) => {
+    const { id } = req.params;
+    const { title, content, isCompleted } = req.body || {};
+
+    const updates = {};
+    if (title !== undefined) updates.title = title;
+    if (content !== undefined) updates.content = content;
+    if (isCompleted !== undefined) updates.is_completed = isCompleted;
+
+    if (Object.keys(updates).length === 0) {
+        return res.status(400).json({
+            success: false,
+            error: "At least one field is required to update",
+        });
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from("notes")
+            .update(updates)
+            .eq("id", id)
+            .select(PG_SELECT)
+            .single();
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            return res
+                .status(404)
+                .json({ success: false, error: "Note not found" });
+        }
+
+        return res.status(200).json({ success: true, data: data[0] });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+router.delete("/pg/:id", async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from("notes")
+            .delete()
+            .eq("id", req.params.id)
+            .select("id, title, content, is_completed");
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            return res
+                .status(404)
+                .json({ success: false, error: "Note not found" });
+        }
+        return res.status(200).json({ success: true, data: data[0] });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
 });

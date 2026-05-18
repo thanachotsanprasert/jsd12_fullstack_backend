@@ -1,27 +1,27 @@
 ### Read all notes
-GET http://localhost:3002/api/v2/notes
+GET http://localhost:3002/api/v2/notes/pg
 
 ### Create a new note
-POST http://localhost:3002/api/v2/notes
+POST http://localhost:3002/api/v2/notes/pg
 Content-Type: application/json
 
     # {
     #     "id": "1",
-    #     "title": "New Project Idea #1",
+    #     "title": "New Project Idea PG-#1",
     #     "content": "Build an E-Commerce app for retail stores",
     #     "isCompleted": false
     # }
 
     # {
     #     "id": "2",
-    #     "title": "Shopping List #2",
+    #     "title": "Shopping List PG-#2",
     #     "content": "1. Milk\n2. Bread\n3. Eggs\n4. Coffee",
     #     "isCompleted": true
     # }
 
     # {
     #     "id": "3",
-    #     "title": "System design study #3",
+    #     "title": "System design study PG-#3",
     #     "content":
     #         "Study about refactoring the folder structure using Separation of Concerns",
     #     "isCompleted": false
@@ -29,13 +29,13 @@ Content-Type: application/json
 
     {
         "id": "4",
-        "title": "Study React & NextJS #4",
+        "title": "Study React & NextJS PG-#4",
         "content": "Learn Front end, too",
         "isCompleted": false
     }
 
 ### Update a note
-PUT http://localhost:3002/api/v2/notes/1
+PUT http://localhost:3002/api/v2/notes/pg/
 Content-Type: application/json
 
 {
@@ -45,4 +45,4 @@ Content-Type: application/json
 }
 
 ### Delete a note
-DELETE http://localhost:3002/api/v2/notes/1
+DELETE http://localhost:3002/api/v2/notes/pg/
