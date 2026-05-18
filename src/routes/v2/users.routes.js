@@ -128,7 +128,7 @@ router.put("/pg/:id", async (req, res) => {
     if (Object.keys(updates).length === 0) {
         return res.status(400).json({
             success: false,
-            error: "No data provided to update",
+            error: "At least one field is required to update",
         });
     }
 
@@ -136,13 +136,40 @@ router.put("/pg/:id", async (req, res) => {
         const { data, error } = await supabase
             .from("users")
             .update(updates)
-            .eq("id", id)
+            .eq("id", id) // const { id } = req.params; ln.118
             .select(PG_SELECT)
             .single();
 
         if (error) throw error;
 
-        return res.status(200).json({ success: true, data });
+        if (!data || data.length === 0) {
+            return res
+                .status(404)
+                .json({ success: false, error: "User not found" });
+        }
+
+        return res.status(200).json({ success: true, data: data[0] });
+    } catch (error) {
+        return res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+router.delete("/pg/:id", async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from("users")
+            .delete()
+            .eq("id", req.params.id)
+            .select("id, username, email, role");
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            return res
+                .status(404)
+                .json({ success: false, error: "User not found" });
+        }
+        return res.status(200).json({ success: true, data: data[0] });
     } catch (error) {
         return res.status(400).json({ success: false, error: error.message });
     }

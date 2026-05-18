@@ -14,20 +14,20 @@ POST http://localhost:3002/api/v2/users/pg
 Content-Type: application/json
 
 {
-    "username": "fukuoka",
-    "role": "user",
-    "email": "f@f.com",
-    "password": "ffffffff"
+    "username": "araraki",
+    "role": "admin",
+    "email": "a@a.com",
+    "password": "aaaaaaaa"
 }
 
 ### Update a user (Supabase) — replace the UUID with a real id from POST response gintama -> Gintoki Updated
-PUT http://localhost:3002/api/v2/users/pg/bcc9e238-aef5-498f-b545-eaab0695d1ab
+PUT http://localhost:3002/api/v2/users/pg/2f863d7e-8432-409c-8b1f-bc363fb976c1
 Content-Type: application/json
 
 {
-    "username": "Gintoki Updated",
+    "username": "Araraki Updated",
     "role": "user"
 }
 
 ### Delete a user (Supabase) — replace the UUID with a real id from POST response
-DELETE http://localhost:3002/api/v2/users/pg/5a036cd6-d37a-406a-96b9-faeaa77b0736
+DELETE http://localhost:3002/api/v2/users/pg/2f863d7e-8432-409c-8b1f-bc363fb976c1
