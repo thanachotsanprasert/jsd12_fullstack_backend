@@ -48,11 +48,18 @@ Content-Type: application/json
     #     "password": "eeeeeeee"
     # }
 
+    # {
+    #     "id": "6",
+    #     "username": "fukuoka-PG",
+    #     "email": "f@f.com",
+    #     "password": "ffffffff"
+    # }
+
     {
-        "id": "6",
-        "username": "fukuoka-PG",
-        "email": "f@f.com",
-        "password": "ffffffff"
+        
+        "username": "haruka-PG",
+        "email": "h@h.com",
+        "password": "hhhhhhhh"
     }
 
 ### Update a user (Supabase) — replace the UUID with a real id from POST response gintama -> Gintoki Updated

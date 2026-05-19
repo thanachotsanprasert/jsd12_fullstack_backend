@@ -40,11 +40,18 @@ Content-Type: application/json
     #     "password": "eeeeeeee"
     # }
 
+    # {
+    #     "id": "6",
+    #     "username": "fukuoka",
+    #     "email": "f@f.com",
+    #     "password": "ffffffff"
+    # }
+
     {
-        "id": "6",
-        "username": "fukuoka",
-        "email": "f@f.com",
-        "password": "ffffffff"
+        
+        "username": "haruka",
+        "email": "h@h.com",
+        "password": "hhhhhhhh"
     }
 
 ### Update a user
