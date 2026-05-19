@@ -9,16 +9,16 @@ const userResponse = (doc) => {
     return user;
 };
 
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
     try {
         const users = await User.find();
         return res.status(200).json({ success: true, data: users });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error });
+    } catch (err) {
+        next(err);
     }
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
     const { username, email, password, role } = req.body || {};
 
     if (!username || !email || !password) {
@@ -32,11 +32,12 @@ export const createUser = async (req, res) => {
         const doc = await User.create({ username, email, password, role });
         return res.status(201).json({ success: true, data: userResponse(doc) });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
-export const updateUser = async (req, res) => {
+export const updateUser = async (req, res, next) => {
     const { username, email, password, role } = req.body || {};
     const updates = {};
 
@@ -67,11 +68,12 @@ export const updateUser = async (req, res) => {
 
         return res.status(200).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
     try {
         const doc = await User.findByIdAndDelete(req.params.id);
 
@@ -83,7 +85,8 @@ export const deleteUser = async (req, res) => {
 
         return res.status(200).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
@@ -92,19 +95,20 @@ export const deleteUser = async (req, res) => {
 
 const PG_SELECT = "id, username, email, role, created_at, updated_at";
 
-export const getUsersPG = async (req, res) => {
+export const getUsersPG = async (req, res, next) => {
     try {
         const { data, error } = await supabase.from("users").select(PG_SELECT);
 
         if (error) throw error;
 
         return res.status(200).json({ success: true, data });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const createUserPG = async (req, res) => {
+export const createUserPG = async (req, res, next) => {
     const { username, email, password, role } = req.body || {};
 
     if (!username || !email || !password) {
@@ -124,12 +128,13 @@ export const createUserPG = async (req, res) => {
         if (error) throw error;
 
         return res.status(201).json({ success: true, data });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const updateUserPG = async (req, res) => {
+export const updateUserPG = async (req, res, next) => {
     const { id } = req.params;
 
     const { username, email, password, role } = req.body || {};
@@ -164,12 +169,13 @@ export const updateUserPG = async (req, res) => {
         }
 
         return res.status(200).json({ success: true, data: data[0] });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const deleteUserPG = async (req, res) => {
+export const deleteUserPG = async (req, res, next) => {
     try {
         const { data, error } = await supabase
             .from("users")
@@ -185,7 +191,8 @@ export const deleteUserPG = async (req, res) => {
                 .json({ success: false, error: "User not found" });
         }
         return res.status(200).json({ success: true, data: data[0] });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };

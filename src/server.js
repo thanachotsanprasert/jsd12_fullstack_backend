@@ -9,7 +9,10 @@ import { router as apiRoutes } from "./routes/index.js";
 const app = express();
 
 app.use(cors());
+
 app.use(express.json());
+
+app.use("/api", apiRoutes);
 
 app.get("/", (req, res) => {
     res.send(`<!doctype html>
@@ -41,15 +44,27 @@ app.get("/", (req, res) => {
         </footer>
       </main>
     </body>
-  </html>`);
+    </html>`);
 });
 
-app.use("/api", apiRoutes);
+// Centralize error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || "Internal Sever Error!",
+        path: req.originalUrl,
+        method: req.method,
+        timestamp: new Date().toISOString(),
+        stack: err.stack,
+    });
+});
+
+const PORT = 3002;
 
 await connectDB();
 await connectSupabase();
 
-const PORT = 3002;
 app.listen(PORT, () => {
     console.log(`Server running at: http://localhost:${PORT} 🟢`);
 });

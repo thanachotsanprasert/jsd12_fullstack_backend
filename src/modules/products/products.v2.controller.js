@@ -3,16 +3,17 @@ import { supabase } from "../../config/supabase.js";
 
 // MongoDB
 
-export const getProducts = async (req, res) => {
+export const getProducts = async (req, res, next) => {
     try {
         const products = await Product.find();
         return res.status(200).json({ success: true, data: products });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error });
+        next(err);
     }
 };
 
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
     const { name, price, category, inStock, description } = req.body || {};
 
     if (!name || price === undefined || !category) {
@@ -32,11 +33,12 @@ export const createProduct = async (req, res) => {
         });
         return res.status(201).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
     const { name, price, category, inStock, description } = req.body || {};
     const updates = {};
 
@@ -67,11 +69,12 @@ export const updateProduct = async (req, res) => {
 
         return res.status(200).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
     try {
         const doc = await Product.findByIdAndDelete(req.params.id);
 
@@ -83,7 +86,8 @@ export const deleteProduct = async (req, res) => {
 
         return res.status(200).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
@@ -92,7 +96,7 @@ export const deleteProduct = async (req, res) => {
 const PG_SELECT =
     "id, name, price, category, in_stock, description, created_at, updated_at";
 
-export const getProductsPG = async (req, res) => {
+export const getProductsPG = async (req, res, next) => {
     try {
         const { data, error } = await supabase
             .from("products")
@@ -101,12 +105,13 @@ export const getProductsPG = async (req, res) => {
         if (error) throw error;
 
         return res.status(200).json({ success: true, data });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const createProductPG = async (req, res) => {
+export const createProductPG = async (req, res, next) => {
     const { name, price, category, inStock, description } = req.body || {};
 
     if (!name || price === undefined || !category) {
@@ -132,12 +137,13 @@ export const createProductPG = async (req, res) => {
         if (error) throw error;
 
         return res.status(201).json({ success: true, data });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const updateProductPG = async (req, res) => {
+export const updateProductPG = async (req, res, next) => {
     const { id } = req.params;
     const { name, price, category, inStock, description } = req.body || {};
 
@@ -172,12 +178,13 @@ export const updateProductPG = async (req, res) => {
         }
 
         return res.status(200).json({ success: true, data: data[0] });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const deleteProductPG = async (req, res) => {
+export const deleteProductPG = async (req, res, next) => {
     try {
         const { data, error } = await supabase
             .from("products")
@@ -193,7 +200,8 @@ export const deleteProductPG = async (req, res) => {
                 .json({ success: false, error: "Product not found" });
         }
         return res.status(200).json({ success: true, data: data[0] });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };

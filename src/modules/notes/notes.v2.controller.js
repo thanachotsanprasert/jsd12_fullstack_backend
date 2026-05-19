@@ -2,16 +2,17 @@ import { Note } from "../../modules/notes/note.model.js";
 import { supabase } from "../../config/supabase.js";
 
 // MongoDB
-export const getNotes = async (req, res) => {
+export const getNotes = async (req, res, next) => {
     try {
         const notes = await Note.find();
         return res.status(200).json({ success: true, data: notes });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error });
+        next(err);
     }
 };
 
-export const createNote = async (req, res) => {
+export const createNote = async (req, res, next) => {
     const { title, content, isCompleted } = req.body || {};
 
     if (!title || !content) {
@@ -29,11 +30,12 @@ export const createNote = async (req, res) => {
         });
         return res.status(201).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
-export const updateNote = async (req, res) => {
+export const updateNote = async (req, res, next) => {
     const { title, content, isCompleted } = req.body || {};
     const updates = {};
 
@@ -62,11 +64,12 @@ export const updateNote = async (req, res) => {
 
         return res.status(200).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
-export const deleteNote = async (req, res) => {
+export const deleteNote = async (req, res, next) => {
     try {
         const doc = await Note.findByIdAndDelete(req.params.id);
 
@@ -78,7 +81,8 @@ export const deleteNote = async (req, res) => {
 
         return res.status(200).json({ success: true, data: doc });
     } catch (err) {
-        return res.status(400).json({ success: false, error: err });
+        // return res.status(400).json({ success: false, error: err });
+        next(err);
     }
 };
 
@@ -86,19 +90,20 @@ export const deleteNote = async (req, res) => {
 
 const PG_SELECT = "id, title, content, is_completed, created_at, updated_at";
 
-export const getNotesPG = async (req, res) => {
+export const getNotesPG = async (req, res, next) => {
     try {
         const { data, error } = await supabase.from("notes").select(PG_SELECT);
 
         if (error) throw error;
 
         return res.status(200).json({ success: true, data });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const createNotePG = async (req, res) => {
+export const createNotePG = async (req, res, next) => {
     const { title, content, isCompleted } = req.body || {};
 
     if (!title || !content) {
@@ -122,12 +127,13 @@ export const createNotePG = async (req, res) => {
         if (error) throw error;
 
         return res.status(201).json({ success: true, data });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const updateNotePG = async (req, res) => {
+export const updateNotePG = async (req, res, next) => {
     const { id } = req.params;
     const { title, content, isCompleted } = req.body || {};
 
@@ -160,12 +166,13 @@ export const updateNotePG = async (req, res) => {
         }
 
         return res.status(200).json({ success: true, data: data[0] });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
 
-export const deleteNotePG = async (req, res) => {
+export const deleteNotePG = async (req, res, next) => {
     try {
         const { data, error } = await supabase
             .from("notes")
@@ -181,7 +188,8 @@ export const deleteNotePG = async (req, res) => {
                 .json({ success: false, error: "Note not found" });
         }
         return res.status(200).json({ success: true, data: data[0] });
-    } catch (error) {
-        return res.status(400).json({ success: false, error: error.message });
+    } catch (err) {
+        // return res.status(400).json({ success: false, error: error.message });
+        next(err);
     }
 };
