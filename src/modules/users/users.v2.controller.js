@@ -162,13 +162,13 @@ export const updateUserPG = async (req, res, next) => {
 
         if (error) throw error;
 
-        if (!data || data.length === 0) {
+        if (!data || data === 0) {
             return res
                 .status(404)
                 .json({ success: false, error: "User not found" });
         }
 
-        return res.status(200).json({ success: true, data: data[0] });
+        return res.status(200).json({ success: true, data: data });
     } catch (err) {
         // return res.status(400).json({ success: false, error: error.message });
         next(err);

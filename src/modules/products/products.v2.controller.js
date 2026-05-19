@@ -94,7 +94,7 @@ export const deleteProduct = async (req, res, next) => {
 // Supabase / PostgreSQL routes (/api/v2/products/pg)
 
 const PG_SELECT =
-    "id, name, price, category, in_stock, description, created_at, updated_at";
+    "id, name, price, category, inStock:in_stock, description, created_at, updated_at";
 
 export const getProductsPG = async (req, res, next) => {
     try {
@@ -171,13 +171,13 @@ export const updateProductPG = async (req, res, next) => {
 
         if (error) throw error;
 
-        if (!data || data.length === 0) {
+        if (!data || data === 0) {
             return res
                 .status(404)
                 .json({ success: false, error: "Product not found" });
         }
 
-        return res.status(200).json({ success: true, data: data[0] });
+        return res.status(200).json({ success: true, data: data });
     } catch (err) {
         // return res.status(400).json({ success: false, error: error.message });
         next(err);

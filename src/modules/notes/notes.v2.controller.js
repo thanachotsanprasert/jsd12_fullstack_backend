@@ -88,7 +88,8 @@ export const deleteNote = async (req, res, next) => {
 
 // Supabase / PostgreSQL routes (/api/v2/notes/pg)
 
-const PG_SELECT = "id, title, content, is_completed, created_at, updated_at";
+const PG_SELECT =
+    "id, title, content, isCompleted:is_completed, created_at, updated_at";
 
 export const getNotesPG = async (req, res, next) => {
     try {
@@ -159,13 +160,13 @@ export const updateNotePG = async (req, res, next) => {
 
         if (error) throw error;
 
-        if (!data || data.length === 0) {
+        if (!data || data === 0) {
             return res
                 .status(404)
                 .json({ success: false, error: "Note not found" });
         }
 
-        return res.status(200).json({ success: true, data: data[0] });
+        return res.status(200).json({ success: true, data: data });
     } catch (err) {
         // return res.status(400).json({ success: false, error: error.message });
         next(err);
