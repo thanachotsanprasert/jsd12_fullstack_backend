@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
     {
@@ -10,4 +11,12 @@ const userSchema = new mongoose.Schema(
     { timestamps: true },
 );
 
+userSchema.pre("save", async function () {
+    try {
+        if (!this.isModified("password")) return;
+        this.password = await bcrypt.hash(this.password, 8);
+    } catch (err) {
+        throw new Error("Hashing password failed: " + err.message);
+    }
+});
 export const User = mongoose.model("User", userSchema);

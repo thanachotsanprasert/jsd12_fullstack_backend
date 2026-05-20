@@ -47,11 +47,26 @@ Content-Type: application/json
     #     "password": "ffffffff"
     # }
 
-    {
+    # {
         
-        "username": "haruka",
-        "email": "h@h.com",
-        "password": "hhhhhhhh"
+    #     "username": "haruka",
+    #     "email": "h@h.com",
+    #     "password": "hhhhhhhh"
+    # }
+# {
+#         "username": "jounouchi",
+#         "email": "j@j.com",
+#         "password": "jjjj"
+#     }
+# {
+#         "username": "kuroko",
+#         "email": "k@k.com",
+#         "password": "kkkkkkkk"
+#     }
+{
+        "username": "nene",
+        "email": "n@n.com",
+        "password": "nnnnnnnn"
     }
 
 ### Update a user
@@ -65,4 +80,4 @@ Content-Type: application/json
 }
 
 ### Delete a user
-DELETE http://localhost:3002/api/v2/users/6a0ac7e0607fc5d689a3501a
+DELETE http://localhost:3002/api/v2/users/6a0d499c59c380ff3072bfc1

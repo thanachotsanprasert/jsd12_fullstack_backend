@@ -1,0 +1,43 @@
+### 200ok
+POST http://localhost:3002/api/v2/users/login
+Content-Type: application/json
+
+{
+    "email": "k@k.com",
+    "password": "kkkkkkkk"
+}
+
+# Bad Request 400
+### 400 no email or password #1
+POST http://localhost:3002/api/v2/users/login
+Content-Type: application/json
+
+{
+    "email": "k@k.com"
+}
+### 400 no email or password #2
+POST http://localhost:3002/api/v2/users/login
+Content-Type: application/json
+
+{
+    "password": "kkkkkkkk"
+}
+
+# Bad Auth 401
+### "401  wrong password"
+POST http://localhost:3002/api/v2/users/login
+Content-Type: application/json
+
+{
+    "email": "k@k.com",
+    "password": "xkkkkkkk"
+}
+
+### 401 wrong email
+POST http://localhost:3002/api/v2/users/login
+Content-Type: application/json
+
+{
+    "email": "x@k.com",
+    "password": "kkkkkkkk"
+}

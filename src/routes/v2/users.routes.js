@@ -5,6 +5,7 @@ import {
     createUser,
     updateUser,
     deleteUser,
+    loginUser,
     getUsersPG,
     createUserPG,
     updateUserPG,
@@ -18,6 +19,8 @@ export const router = Router();
 router.get("/", getUsers);
 
 router.post("/", createUser);
+
+router.post("/login", loginUser);
 
 router.put("/:id", updateUser);
 
