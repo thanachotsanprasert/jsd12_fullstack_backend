@@ -1,7 +1,5 @@
 # JSD12 Week12 | API Server - Full Stack App (Backend)
 
-Frontend Repo: https://github.com/weerayosong/jsd12-full-stack-app-fe (Branch: main)
-
 **Current Status:** The latest development progress is maintained on **Branch: phase-05_error-handling**.
 
 ## Project Overview
@@ -29,12 +27,10 @@ The project follows a phased approach, reflecting continuous refactoring and arc
     - Engineered a global, centralized error-handling middleware.
     - Ensures consistent error formatting and robust exception catching across all API endpoints, preventing server crashes and providing standard HTTP response codes.
 
-## Upcoming Roadmap
-
-- **Phase 6: Authentication & Authorization**
-    - Implementation of secure user authentication protocols.
-    - Integration of `bcrypt` for robust password hashing prior to database storage.
-    - Development of secure session management and endpoint protection mechanisms.
+- **Phase 6: Authentication & Authorization (Completed)**
+    - Implementation of secure user authentication protocols using JSON Web Tokens (JWT).
+    - Integration of `bcrypt` for robust password hashing across MongoDB and Supabase.
+    - Development of secure session management and endpoint protection mechanisms via custom middleware.
 
 ## Tools & Technologies
 

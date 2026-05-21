@@ -9,6 +9,7 @@ import {
     updateNotePG,
     deleteNotePG,
 } from "../../modules/notes/notes.v2.controller.js";
+import { protect } from "../../middlewares/auth.js";
 
 export const router = Router();
 
@@ -16,18 +17,18 @@ export const router = Router();
 
 router.get("/", getNotes);
 
-router.post("/", createNote);
+router.post("/", protect, createNote);
 
-router.put("/:id", updateNote);
+router.put("/:id", protect, updateNote);
 
-router.delete("/:id", deleteNote);
+router.delete("/:id", protect, deleteNote);
 
 // Supabase / PostgreSQL routes (/api/v2/notes/pg)
 
 router.get("/pg", getNotesPG);
 
-router.post("/pg", createNotePG);
+router.post("/pg", protect, createNotePG);
 
-router.put("/pg/:id", updateNotePG);
+router.put("/pg/:id", protect, updateNotePG);
 
-router.delete("/pg/:id", deleteNotePG);
+router.delete("/pg/:id", protect, deleteNotePG);
